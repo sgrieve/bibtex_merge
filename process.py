@@ -5,14 +5,18 @@ import re
 # This is the thesis references, with the month values wrapped
 # in braces to stop bibtexparser complaining
 with open('References_clean.bib') as bibtex_file:
-    bib_database = bibtexparser.load(bibtex_file)
+    thesis_bib = bibtexparser.load(bibtex_file)
 
 # This is the new project
 with open('/Users/stuart/Papers/repro_of_topo_analysis/refs.bib') as bibtex_file:
-    bib_database2 = bibtexparser.load(bibtex_file)
+    new_bib = bibtexparser.load(bibtex_file)
 
 # Add the two lists of dictionaries together
-refs = bib_database.entries + bib_database2.entries
+refs = new_bib.entries + thesis_bib.entries
+
+# Remove duplicates based on the ID field
+# https://stackoverflow.com/a/11092590/1627162
+refs = list({v['ID']:v for v in refs}.values())
 
 # Load the text of the new project to find all the citation ids
 with open('/Users/stuart/Papers/repro_of_topo_analysis/chapter.tex') as f:
